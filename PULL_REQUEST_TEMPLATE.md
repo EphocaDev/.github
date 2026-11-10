@@ -24,4 +24,5 @@
      is silent" (what you chose), one bullet each.
      A large PR: add a table, one row per folder, saying what it holds.
      Weekly fixes: one Jira line per card, with its bullets under it.
-     Aim for 150–250 words. Proof logs, runbooks and history go in a comment or the docs. -->
+     Aim for 150–250 words; a large PR may run to about 400, the extra in the table, never in
+     prose. Proof logs, runbooks and history go in a comment or the docs. -->
