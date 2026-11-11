@@ -1,4 +1,4 @@
-**Jira:** MWD-### — what this PR delivers, in one sentence a teammate understands
+What this PR delivers, in one sentence a teammate understands. (The Jira key goes in the title.)
 
 <!-- ⚠️ Only if merging needs care: it deploys production, it must wait for something,
      or it breaks someone's local setup. Say it here in one line. Otherwise delete this. -->
@@ -23,6 +23,6 @@
 <!-- Design work: add "Departures from Figma" (each one agreed with whom) and "Where the design
      is silent" (what you chose), one bullet each.
      A large PR: add a table, one row per folder, saying what it holds.
-     Weekly fixes: one Jira line per card, with its bullets under it.
+     Weekly fixes: one line per card, its key and what it delivered, with its bullets under it.
      Aim for 150–250 words; a large PR may run to about 400, the extra in the table, never in
      prose. Proof logs, runbooks and history go in a comment or the docs. -->
