@@ -1,0 +1,49 @@
+# The Jira key check, written once for every EphocaDev repository (BS-1546).
+#
+# A pull request must carry a Jira key in its branch name or its title: MWD-### (Marketing,
+# Web & Design) or BS-### (Business Systems). The key is what links the work to the card's
+# Development panel, and the Atlassian GitHub app reads it from either place.
+#
+# This file is a REUSABLE workflow: it runs only when a repository calls it. The caller keeps
+# its own trigger, because which pull requests are checked differs per repository (a repository
+# with a `production` branch checks pull requests into `main` only, or its promotion PR, which
+# has no key in its title, would fail on every merge). README.md has the caller to copy.
+#
+# The pattern lives here and nowhere else. A third board is one change to the `grep` below.
+# A repository's own commit-msg hook, where it has one, must accept the same keys.
+#
+# Dependabot's pull requests carry no key by nature and are exempt.
+#
+# This repository is public: nothing secret belongs in this file, and it takes no secret.
+name: Jira key
+
+on:
+  workflow_call: {}
+
+permissions: {}
+
+jobs:
+  # The caller's job id and this one make the check's name: a caller job `jira-key` reports
+  # `jira-key / check`. That name is what a ruleset must require, so renaming this job id
+  # un-satisfies every ruleset that names it.
+  check:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Require MWD-### or BS-### in the branch name or PR title
+        env:
+          HEAD_REF: ${{ github.head_ref }}
+          PR_TITLE: ${{ github.event.pull_request.title }}
+          PR_USER: ${{ github.event.pull_request.user.login }}
+        run: |
+          case "$HEAD_REF" in
+            dependabot/*) echo "Dependabot branch: exempt."; exit 0 ;;
+          esac
+          if [ "$PR_USER" = "dependabot[bot]" ]; then
+            echo "Bot PR: exempt."; exit 0
+          fi
+          if printf '%s %s' "$HEAD_REF" "$PR_TITLE" | grep -qE '(MWD|BS)-[0-9]+'; then
+            echo "Jira key present."
+          else
+            echo "::error::No Jira key (MWD-### or BS-###) in the branch name or PR title. Name the branch MWD-###-slug or BS-###-slug, or put the key in the PR title."
+            exit 1
+          fi
